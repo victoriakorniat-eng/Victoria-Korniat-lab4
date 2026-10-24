@@ -1,0 +1,36 @@
+[
+  {
+    "coin_id": "aave",
+    "coin_name": "Aave",
+    "symbol": "AAVE",
+    "market_cap_rank": "46",
+    "timestamp": "2024-12-04 00:00:00",
+    "date": "2024-12-04",
+    "price": "241.886714069212",
+    "market_cap": "3633153845.1457043",
+    "volume": "1181708218.5850096",
+    "daily_return": "",
+    "price_ma7": "241.886714069212",
+    "price_ma30": "241.886714069212",
+    "volatility_7d": "",
+    "cumulative_return": "",
+    "month": "2024-12"
+  },
+  {
+    "coin_id": "aave",
+    "coin_name": "Aave",
+    "symbol": "AAVE",
+    "market_cap_rank": "46",
+    "timestamp": "2024-12-05 00:00:00",
+    "date": "2024-12-05",
+    "price": "255.96660995569954",
+    "market_cap": "3841768449.872117",
+    "volume": "1191179116.5987434",
+    "daily_return": "5.820863680201471",
+    "price_ma7": "248.92666201245578",
+    "price_ma30": "248.92666201245578",
+    "volatility_7d": "",
+    "cumulative_return": "5.820863680201471",
+    "month": "2024-12"
+  }
+] 

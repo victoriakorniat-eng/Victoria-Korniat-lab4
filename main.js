@@ -34,6 +34,30 @@ function sendError(res, status, message) {
   sendJson(res, status, { error: message });
 }
 
+// Перетворює значення з файлу на число; якщо неможливо — null
+function toNumber(value) {
+  if (typeof value !== 'string' && typeof value !== 'number') return null;
+  if (typeof value === 'string' && value.trim() === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function processData(records, showSymbol, minPrice) {
+  const result = [];
+  for (const rec of records) {
+    if (rec === null || typeof rec !== 'object') continue;
+    const price = toNumber(rec.price);
+    if (minPrice !== null && !(price !== null && price > minPrice)) continue;
+
+    const item = { coin: rec.coin_name ?? null };
+    if (showSymbol) item.symbol = rec.symbol ?? null;
+    item.date = rec.date ?? null;
+    item.price = price;
+    result.push(item);
+  }
+  return result;
+}
+
 function handleRequest(req, res) {
   let url;
   try {
@@ -42,11 +66,41 @@ function handleRequest(req, res) {
     sendError(res, 400, 'Некоректна адреса запиту');
     return;
   }
+
   if (url.pathname !== '/') {
     sendError(res, 404, 'Маршрут не знайдено');
     return;
   }
-  sendJson(res, 200, { message: 'Сервер працює' });   // тимчасова заглушка
+
+  const showSymbol = url.searchParams.get('symbol') === 'true';
+
+  let minPrice = null;
+  if (url.searchParams.has('min_price')) {
+    minPrice = toNumber(url.searchParams.get('min_price'));
+    if (minPrice === null) {
+      sendError(res, 400, 'Параметр min_price має бути числом');
+      return;
+    }
+  }
+
+  fs.readFile(options.input, 'utf8', (err, text) => {
+    if (err) {
+      sendError(res, 500, 'Не вдалося прочитати файл даних');
+      return;
+    }
+    let records;
+    try {
+      records = JSON.parse(text);
+    } catch (e) {
+      sendError(res, 500, 'Файл даних пошкоджений: некоректний JSON');
+      return;
+    }
+    if (!Array.isArray(records)) {
+      sendError(res, 500, 'Файл даних має містити JSON-масив');
+      return;
+    }
+    sendJson(res, 200, processData(records, showSymbol, minPrice));
+  });
 }
 
 fs.access(options.input, fs.constants.R_OK, (err) => {
@@ -64,7 +118,6 @@ fs.access(options.input, fs.constants.R_OK, (err) => {
     }
   });
 
-  
   server.on('error', (e) => {
     console.error('Помилка сервера:', e.message);
     process.exit(1);

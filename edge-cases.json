@@ -1,0 +1,8 @@
+[
+  { "coin_name": "Exact",      "symbol": "EXC", "date": "2025-01-01", "price": "100" },
+  { "coin_name": "NullPrice",  "symbol": "NPR", "date": "2025-01-02", "price": null },
+  { "coin_name": "EmptyPrice", "symbol": "EPR", "date": "2025-01-03", "price": "" },
+  { "coin_name": "BadPrice",   "symbol": "BPR", "date": "2025-01-04", "price": "abc" },
+  { "coin_name": "Big",        "symbol": "BIG", "date": "2025-01-05", "price": "99999.5" },
+  { "symbol": "NON", "date": "2025-01-06", "price": "5" }
+]

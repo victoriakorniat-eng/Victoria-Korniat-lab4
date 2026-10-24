@@ -27,7 +27,20 @@ function respond(res, status, text) {
 }
 
 function sendJson(res, status, payload) {
-  respond(res, status, JSON.stringify(payload, null, 2));
+  const body = JSON.stringify(payload, null, 2);
+  if (!options.output) {
+    respond(res, status, body);
+    return;
+  }
+  fs.writeFile(options.output, body, 'utf8', (err) => {
+    if (err) {
+      console.error('Помилка запису:', err.message);
+      respond(res, 500,
+        JSON.stringify({ error: 'Не вдалося записати файл відповіді' }, null, 2));
+      return;
+    }
+    respond(res, status, body);
+  });
 }
 
 function sendError(res, status, message) {
